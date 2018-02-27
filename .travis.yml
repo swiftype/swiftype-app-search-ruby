@@ -1,0 +1,15 @@
+language: ruby
+script: rspec
+rvm:
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.4
+  - jruby
+jdk:
+  - oraclejdk8
+
+before_install:
+  - gem update --system
+  - gem --version
+  - gem update bundler
