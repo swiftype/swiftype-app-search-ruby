@@ -5,14 +5,32 @@ describe SwiftypeAppSearch::Client do
   let(:client) { SwiftypeAppSearch::Client.new(:account_host_key => as_account_host_key, :api_key => as_api_key) }
 
   context 'Documents' do
-    %i[index_documents].each do |method|
-      context "##{method}" do
-        it 'should validate required document fields' do
-          documents = [{'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE'}]
+    let(:document) { { 'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE' } }
+    let(:documents) { [document] }
+
+    describe '#index_document' do
+      it 'should validate required document fields' do
+        expect do
+          client.index_document(engine_name, document)
+        end.to raise_error(SwiftypeAppSearch::InvalidDocument, 'Error: missing required fields (id)')
+      end
+
+      context 'with an invalid document that passes client checks' do
+        let(:document) { { 'id' => 1, 'bad' => { 'no' => 'nested hashes' } } }
+
+        it 'should raise an error when the API returns errors in the response' do
           expect do
-            client.public_send(method, engine_name, documents)
-          end.to raise_error(SwiftypeAppSearch::InvalidDocument, 'Error: missing required fields (id)')
+            client.index_document(engine_name, document)
+          end.to raise_error(SwiftypeAppSearch::InvalidDocument, /Invalid field value/)
         end
+      end
+    end
+
+    describe '#index_documents' do
+      it 'should validate required document fields' do
+        expect do
+          client.index_documents(engine_name, documents)
+        end.to raise_error(SwiftypeAppSearch::InvalidDocument, 'Error: missing required fields (id)')
       end
     end
   end
