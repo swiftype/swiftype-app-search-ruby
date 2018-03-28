@@ -19,6 +19,22 @@ module SwiftypeAppSearch
         get("engines/#{engine_name}/documents", ids)
       end
 
+      # Index a document using the {App Search API}[https://swiftype.com/documentation/app-search/].
+      #
+      # @param [String] engine_name the unique Engine name
+      # @param [Array] document a Document Hash
+      #
+      # @return [Hash] processed Document Status hash
+      #
+      # @raise [SwiftypeAppSearch::InvalidDocument] when the document is missing required fields, contains unsupported fields, or has processing errors returned from the api
+      # @raise [Timeout::Error] when timeout expires waiting for statuses
+      def index_document(engine_name, document)
+        response = index_documents(engine_name, [document])
+        errors = response.first['errors']
+        raise InvalidDocument.new(errors.join('; ')) if errors.any?
+        response.first.tap { |h| h.delete('errors') }
+      end
+
       # Index a batch of documents using the {App Search API}[https://swiftype.com/documentation/app-search/].
       #
       # @param [String] engine_name the unique Engine name
@@ -43,6 +59,7 @@ module SwiftypeAppSearch
       end
 
       private
+
       def validate_and_normalize_document(document)
         document = Utils.stringify_keys(document)
         document_keys = document.keys.to_set

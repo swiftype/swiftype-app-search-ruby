@@ -24,7 +24,24 @@ It also requires a valid `API_KEY`, which authenticates requests to the API:
 client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
 ```
 
-### Indexing: Creating and updating Documents
+### Indexing Creating or Updating a Single Document
+```ruby
+engine_name = 'favorite-videos'
+document = {
+  :id => 'INscMGmhmX4',
+  :url => 'https://www.youtube.com/watch?v=INscMGmhmX4',
+  :title => 'The Original Grumpy Cat',
+  :body => 'A wonderful video of a magnificent cat.'
+}
+
+begin
+  client.index_document(engine_name, document)
+rescue SwiftypeAppSearch::ClientException => e
+  # handle error
+end
+```
+
+### Indexing: Creating or Updating Documents
 
 ```ruby
 engine_name = 'favorite-videos'
