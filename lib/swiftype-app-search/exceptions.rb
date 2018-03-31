@@ -3,7 +3,7 @@ module SwiftypeAppSearch
     attr_reader :errors
 
     def initialize(response)
-      @errors = response['errors'] || [ response ]
+      @errors = response['errors'] || [response]
       message = (errors.count == 1) ? "Error: #{errors.first}" : "Errors: #{errors.inspect}"
       super(message)
     end
@@ -16,9 +16,10 @@ module SwiftypeAppSearch
   class InvalidDocument < ClientException; end
 
   class UnexpectedHTTPException < ClientException
-    def initialize(http_response)
-      @errors = []
-      super("HTTP #{http_response.code}: #{http_response.body}")
+    def initialize(response, response_body)
+      response_body['errors'] = [response.message] unless response_body['errors']
+      response_body['errors'].map! { |e| "(#{response.code}) #{e}" }
+      super(response_body)
     end
   end
 end
