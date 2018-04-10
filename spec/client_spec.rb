@@ -6,42 +6,71 @@ describe SwiftypeAppSearch::Client do
 
   context 'Documents' do
     let(:document) { { 'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE' } }
-    let(:documents) { [document] }
+
+    before do
+      client.create_engine(engine_name) rescue SwiftypeAppSearch::BadRequest
+    end
+
+    after do
+      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
+    end
 
     describe '#index_document' do
-      it 'should validate required document fields' do
-        expect do
-          client.index_document(engine_name, document)
-        end.to raise_error(SwiftypeAppSearch::InvalidDocument, 'Error: missing required fields (id)')
+      subject { client.index_document(engine_name, document) }
+
+      it 'should return a processed document status hash' do
+        expect(subject).to match('id' => anything)
       end
 
-      context 'with an invalid document that passes client checks' do
-        let(:document) { { 'id' => 1, 'bad' => { 'no' => 'nested hashes' } } }
+      context 'when the document has an id' do
+        let(:id) { 'some_id' }
+        let(:document) { { 'id' => id, 'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE' } }
+
+        it 'should return a processed document status hash with the same id' do
+          expect(subject).to eq('id' => id)
+        end
+      end
+
+      context 'when a document has processing errors' do
+        let(:document) { { 'bad' => { 'no' => 'nested hashes' } } }
 
         it 'should raise an error when the API returns errors in the response' do
           expect do
-            client.index_document(engine_name, document)
+            subject
           end.to raise_error(SwiftypeAppSearch::InvalidDocument, /Invalid field value/)
         end
       end
     end
 
     describe '#index_documents' do
-      it 'should validate required document fields' do
-        expect do
-          client.index_documents(engine_name, documents)
-        end.to raise_error(SwiftypeAppSearch::InvalidDocument, 'Error: missing required fields (id)')
+      let(:documents) { [document, second_document] }
+      let(:second_document_id) { 'another_id' }
+      let(:second_document) { { 'id' => second_document_id, 'url' => 'https://www.youtube.com/watch?v=9T1vfsHYiKY' } }
+      subject { client.index_documents(engine_name, documents) }
+
+      it 'should return an array of document status hashes' do
+        expect(subject).to match([
+          { 'id' => anything, 'errors' => [] },
+          { 'id' => second_document_id, 'errors' => [] }
+        ])
+      end
+
+      context 'when one of the documents has processing errors' do
+        let(:second_document) { { 'bad' => { 'no' => 'nested hashes' } } }
+
+        it 'should return respective errors in an array of document processing hashes' do
+          expect(subject).to match([
+            { 'id' => anything, 'errors' => [] },
+            { 'id' => anything, 'errors' => ['Invalid field value: Value \'{"no"=>"nested hashes"}\' cannot be an object'] },
+          ])
+        end
       end
     end
   end
 
   context 'Engines' do
     after do
-      # Clean up the test engine from our account
-      begin
-        client.destroy_engine(engine_name)
-      rescue SwiftypeAppSearch::NonExistentRecord
-      end
+      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
     end
 
     context '#create_engine' do
