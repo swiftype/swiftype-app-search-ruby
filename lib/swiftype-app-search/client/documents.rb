@@ -4,9 +4,6 @@
 module SwiftypeAppSearch
   class Client
     module Documents
-      REQUIRED_TOP_LEVEL_KEYS = [
-        'id'
-      ].map!(&:freeze).to_set.freeze
 
       # Retrieve Documents from the API by IDs for the {App Search API}[https://swiftype.com/documentation/app-search/]
       #
@@ -26,7 +23,7 @@ module SwiftypeAppSearch
       #
       # @return [Hash] processed Document Status hash
       #
-      # @raise [SwiftypeAppSearch::InvalidDocument] when the document is missing required fields, contains unsupported fields, or has processing errors returned from the api
+      # @raise [SwiftypeAppSearch::InvalidDocument] when the document has processing errors returned from the api
       # @raise [Timeout::Error] when timeout expires waiting for statuses
       def index_document(engine_name, document)
         response = index_documents(engine_name, [document])
@@ -42,10 +39,10 @@ module SwiftypeAppSearch
       #
       # @return [Array<Hash>] an Array of processed Document Status hashes
       #
-      # @raise [SwiftypeAppSearch::InvalidDocument] when a single document is missing required fields or contains unsupported fields
+      # @raise [SwiftypeAppSearch::InvalidDocument] when any documents have processing errors returned from the api
       # @raise [Timeout::Error] when timeout expires waiting for statuses
       def index_documents(engine_name, documents)
-        documents.map! { |document| validate_and_normalize_document(document) }
+        documents.map! { |document| normalize_document(document) }
         post("engines/#{engine_name}/documents", documents)
       end
 
@@ -60,13 +57,8 @@ module SwiftypeAppSearch
 
       private
 
-      def validate_and_normalize_document(document)
-        document = Utils.stringify_keys(document)
-        document_keys = document.keys.to_set
-        missing_keys = REQUIRED_TOP_LEVEL_KEYS - document_keys
-        raise InvalidDocument.new("missing required fields (#{missing_keys.to_a.join(', ')})") if missing_keys.any?
-
-        document
+      def normalize_document(document)
+        Utils.stringify_keys(document)
       end
     end
   end
