@@ -67,6 +67,8 @@ module SwiftypeAppSearch
           raise SwiftypeAppSearch::NonExistentRecord, response_json
         when Net::HTTPForbidden
           raise SwiftypeAppSearch::Forbidden, response_json
+        when Net::HTTPRequestEntityTooLarge
+          raise SwiftypeAppSearch::RequestEntityTooLarge, response_json
         else
           raise SwiftypeAppSearch::UnexpectedHTTPException, response
         end

@@ -14,6 +14,7 @@ module SwiftypeAppSearch
   class BadRequest < ClientException; end
   class Forbidden < ClientException; end
   class InvalidDocument < ClientException; end
+  class RequestEntityTooLarge < ClientException; end
 
   class UnexpectedHTTPException < ClientException
     def initialize(http_response)
