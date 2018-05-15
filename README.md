@@ -1,7 +1,5 @@
 # Ruby client for the Swiftype App Search API
 
-**Note: Swiftype App Search is currently in beta**
-
 ## Installation
 
 To install the gem, execute:
@@ -10,7 +8,7 @@ To install the gem, execute:
 gem install swiftype-app-search
 ```
 
-Or place `gem 'swiftype-app-search', '~> 0.1.0` in your `Gemfile` and run `bundle install`.
+Or place `gem 'swiftype-app-search', '~> 0.1.3` in your `Gemfile` and run `bundle install`.
 
 ## Usage
 

@@ -97,15 +97,20 @@ describe SwiftypeAppSearch::Client do
 
     context '#list_engines' do
       it 'should return an array with a list of engines' do
-        expect(client.list_engines).to be_an(Array)
+        expect(client.list_engines['results']).to be_an(Array)
       end
 
       it 'should include the engine name in listed objects' do
-        # Create an engine
         client.create_engine(engine_name)
 
-        # Get the list
-        engines = client.list_engines
+        engines = client.list_engines['results']
+        expect(engines.find { |e| e['name'] == engine_name }).to_not be_nil
+      end
+
+      it 'should include the engine name in listed objects with pagination' do
+        client.create_engine(engine_name)
+
+        engines = client.list_engines(:current => 1, :size => 20)['results']
         expect(engines.find { |e| e['name'] == engine_name }).to_not be_nil
       end
     end

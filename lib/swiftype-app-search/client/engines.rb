@@ -3,8 +3,8 @@
 module SwiftypeAppSearch
   class Client
     module Engines
-      def list_engines
-        get("engines")
+      def list_engines(current: 1, size: 20)
+        get("engines", :page => { :current => current, :size => size })
       end
 
       def get_engine(engine_name)
