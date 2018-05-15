@@ -70,7 +70,7 @@ module SwiftypeAppSearch
         when Net::HTTPRequestEntityTooLarge
           raise SwiftypeAppSearch::RequestEntityTooLarge, response_json
         else
-          raise SwiftypeAppSearch::UnexpectedHTTPException, response
+          raise SwiftypeAppSearch::UnexpectedHTTPException.new(response, response_json)
         end
       end
     end
