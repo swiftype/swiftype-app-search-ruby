@@ -38,13 +38,13 @@ module SwiftypeAppSearch
         # Build a JWT for authentication
         #
         # @param [String] api_key the API Key to sign the request with
-        # @param [String] api_key_id the unique API Key identifier
+        # @param [String] api_key_name the unique name for the API Key
         # @option options see the {App Search API}[https://swiftype.com/documentation/app-search/] for supported search options.
         #
         # @return [String] the JWT to use for authentication
-        def create_signed_search_key(api_key, api_key_id, options = {})
+        def create_signed_search_key(api_key, api_key_name, options = {})
           raise 'Must create signed search key with an API Key, cannot use a Search Key' unless api_key.start_with?('api')
-          payload = Utils.symbolize_keys(options).merge(:api_key_id => api_key_id)
+          payload = Utils.symbolize_keys(options).merge(:api_key_name => api_key_name)
           JWT.encode(payload, api_key, ALGORITHM)
         end
       end
