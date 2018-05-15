@@ -32,12 +32,12 @@ describe SwiftypeAppSearch::Client do
       end
 
       context 'when a document has processing errors' do
-        let(:document) { { 'bad' => { 'no' => 'nested hashes' } } }
+        let(:document) { { 'id' => 'too long' * 100 } }
 
         it 'should raise an error when the API returns errors in the response' do
           expect do
             subject
-          end.to raise_error(SwiftypeAppSearch::InvalidDocument, /Invalid field value/)
+          end.to raise_error(SwiftypeAppSearch::InvalidDocument, /Invalid field/)
         end
       end
     end
@@ -56,12 +56,12 @@ describe SwiftypeAppSearch::Client do
       end
 
       context 'when one of the documents has processing errors' do
-        let(:second_document) { { 'bad' => { 'no' => 'nested hashes' } } }
+        let(:second_document) { { 'id' => 'too long' * 100 } }
 
         it 'should return respective errors in an array of document processing hashes' do
           expect(subject).to match([
             { 'id' => anything, 'errors' => [] },
-            { 'id' => anything, 'errors' => ['Invalid field value: Value \'{"no"=>"nested hashes"}\' cannot be an object'] },
+            { 'id' => anything, 'errors' => ['Invalid field type: id must be less than 800 characters'] },
           ])
         end
       end
