@@ -17,9 +17,9 @@ module SwiftypeAppSearch
   class RequestEntityTooLarge < ClientException; end
 
   class UnexpectedHTTPException < ClientException
-    def initialize(http_response)
-      @errors = []
-      super("HTTP #{http_response.code}: #{http_response.body}")
+    def initialize(response, response_json)
+      errors = (response_json['errors'] || [response.message]).map { |e| "(#{response.code}) #{e}" }
+      super({ 'errors' => errors })
     end
   end
 end
