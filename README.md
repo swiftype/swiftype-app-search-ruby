@@ -22,7 +22,12 @@ It also requires a valid `API_KEY`, which authenticates requests to the API:
 client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
 ```
 
-### Indexing Creating or Updating a Single Document
+### API Methods
+
+This client is a thin interface to the Swiftype App Search Api. Additional details for requests and responses can be
+found in the [documentation](https://swiftype.com/documentation/app-search).
+
+#### Indexing Creating or Updating a Single Document
 ```ruby
 engine_name = 'favorite-videos'
 document = {
@@ -33,13 +38,14 @@ document = {
 }
 
 begin
-  client.index_document(engine_name, document)
+  response = client.index_document(engine_name, document)
+  puts response
 rescue SwiftypeAppSearch::ClientException => e
-  # handle error
+  puts e
 end
 ```
 
-### Indexing: Creating or Updating Documents
+#### Indexing: Creating or Updating Documents
 
 ```ruby
 engine_name = 'favorite-videos'
@@ -59,42 +65,88 @@ documents = [
 ]
 
 begin
-  index_document_results = client.index_documents(engine_name, documents)
-  # handle index document results
+  response = client.index_documents(engine_name, documents)
+  puts response
 rescue SwiftypeAppSearch::ClientException => e
-  # handle error
+  puts e
 end
 ```
 
-### Listing Documents
+#### Listing Documents
 
 ```ruby
 engine_name = 'favorite-videos'
 document_ids = ['INscMGmhmX4', 'JNDFojsd02']
 
 begin
-  document_contents = client.get_documents(engine_name, document_ids)
-  # handle document contents
+  response = client.get_documents(engine_name, document_ids)
+  puts response
 rescue SwiftypeAppSearch::ClientException => e
-  # handle error
+  puts e
 end
 ```
 
-### Destroying Documents
+#### Destroying Documents
 
 ```ruby
 engine_name = 'favorite-videos'
 document_ids = ['INscMGmhmX4', 'JNDFojsd02']
 
 begin
-  destroy_document_results = client.destroy_documents(engine_name, document_ids)
-  # handle destroy document results
+  response = client.destroy_documents(engine_name, document_ids)
+  puts response
 rescue SwiftypeAppSearch::ClientException => e
-  # handle error
+  puts e
 end
 ```
 
-### Searching
+##### Listing Engines
+```ruby
+begin
+  response = client.list_engines
+  puts response
+rescue SwiftypeAppSearch::ClientException => e
+  puts e
+end
+```
+
+##### Retrieving Engines
+```ruby
+engine_name = 'favorite-videos'
+
+begin
+  response = client.get_engine(engine_name)
+  puts response
+rescue SwiftypeAppSearch::ClientException => e
+  puts e
+end
+```
+
+##### Creating Engines
+```ruby
+engine_name = 'favorite-videos'
+
+begin
+  response = client.create_engine(engine_name)
+  puts response
+rescue SwiftypeAppSearch::ClientException => e
+  puts e
+end
+```
+
+##### Destroying Engines
+```ruby
+engine_name = 'favorite-videos'
+
+begin
+  response = client.destroy_engine(engine_name)
+  puts response
+rescue SwiftypeAppSearch::ClientException => e
+  puts e
+end
+```
+
+#### Searching
 
 ```ruby
 engine_name = 'favorite-videos'
@@ -104,10 +156,10 @@ result_fields = { :title => { :raw => {} } }
 options = { :search_fields => search_fields, :result_fields => result_fields }
 
 begin
-  search_results = client.search(engine_name, query, options)
-  # handle search results
+  response = client.search(engine_name, query, options)
+  puts response
 rescue SwiftypeAppSearch::ClientException => e
-  # handle error
+  puts e
 end
 ```
 
@@ -135,4 +187,4 @@ If you need to debug an API call made by the client, there are a few things you 
 
 ## Contributions
 
-To contribute code to this gem, please fork the repository and submit a pull request.
+To contribute code, please fork the repository and submit a pull request.
