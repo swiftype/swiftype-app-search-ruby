@@ -27,7 +27,8 @@ client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_
 This client is a thin interface to the Swiftype App Search Api. Additional details for requests and responses can be
 found in the [documentation](https://swiftype.com/documentation/app-search).
 
-#### Indexing Creating or Updating a Single Document
+#### Indexing: Creating or Updating a Single Document
+
 ```ruby
 engine_name = 'favorite-videos'
 document = {
@@ -100,7 +101,8 @@ rescue SwiftypeAppSearch::ClientException => e
 end
 ```
 
-##### Listing Engines
+#### Listing Engines
+
 ```ruby
 begin
   response = client.list_engines
@@ -110,7 +112,8 @@ rescue SwiftypeAppSearch::ClientException => e
 end
 ```
 
-##### Retrieving Engines
+#### Retrieving Engines
+
 ```ruby
 engine_name = 'favorite-videos'
 
@@ -122,7 +125,8 @@ rescue SwiftypeAppSearch::ClientException => e
 end
 ```
 
-##### Creating Engines
+#### Creating Engines
+
 ```ruby
 engine_name = 'favorite-videos'
 
@@ -134,7 +138,8 @@ rescue SwiftypeAppSearch::ClientException => e
 end
 ```
 
-##### Destroying Engines
+#### Destroying Engines
+
 ```ruby
 engine_name = 'favorite-videos'
 
@@ -162,7 +167,6 @@ rescue SwiftypeAppSearch::ClientException => e
   puts e
 end
 ```
-
 
 ## Running Tests
 
