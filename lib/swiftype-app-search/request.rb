@@ -94,7 +94,10 @@ module SwiftypeAppSearch
     def clean_json(object)
       case object
       when Hash
-        object.transform_values { |value| clean_json(value) }
+        object.inject({}) do |builder, (key, value)|
+          builder[key] = clean_json(value)
+          builder
+        end
       when Enumerable
         object.map { |value| clean_json(value) }
       else
@@ -103,9 +106,8 @@ module SwiftypeAppSearch
     end
 
     def clean_atom(atom)
-      case atom
-      when Time, DateTime
-        atom.iso8601
+      if atom.is_a?(Time)
+        atom.to_datetime
       else
         atom
       end

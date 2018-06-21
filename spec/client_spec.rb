@@ -42,18 +42,18 @@ describe SwiftypeAppSearch::Client do
       end
 
       context 'when a document has a Ruby Time object' do
-        let(:time_iso8601) { '2018-01-01T01:01:01Z' }
-        let(:time_object) { Time.parse(time_iso8601) }
+        let(:time_rfc3339) { '2018-01-01T01:01:01+00:00' }
+        let(:time_object) { Time.parse(time_rfc3339) }
         let(:document) { { 'created_at' => time_object } }
 
-        it 'should serialize the time object in ISO 8601' do
+        it 'should serialize the time object in RFC 3339' do
           response = subject
           expect(response).to have_key('id')
           document_id = response.fetch('id')
           expect do
             documents = client.get_documents(engine_name, [document_id])
             expect(documents.size).to eq(1)
-            expect(documents.first['created_at']).to eq(time_iso8601)
+            expect(documents.first['created_at']).to eq(time_rfc3339)
           end.to_not raise_error
         end
       end
