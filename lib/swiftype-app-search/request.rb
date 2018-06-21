@@ -1,5 +1,6 @@
 require 'net/https'
 require 'json'
+require 'time'
 require 'swiftype-app-search/exceptions'
 require 'swiftype-app-search/version'
 require 'openssl'
@@ -86,6 +87,30 @@ module SwiftypeAppSearch
       @debug ||= (ENV['AS_DEBUG'] == 'true')
     end
 
+    def serialize_json(object)
+      JSON.generate(clean_json(object))
+    end
+
+    def clean_json(object)
+      case object
+      when Hash
+        object.transform_values { |value| clean_json(value) }
+      when Enumerable
+        object.map { |value| clean_json(value) }
+      else
+        clean_atom(object)
+      end
+    end
+
+    def clean_atom(atom)
+      case atom
+      when Time, DateTime
+        atom.iso8601
+      else
+        atom
+      end
+    end
+
     def build_request(method, uri, params)
       klass = case method
               when :get
@@ -101,7 +126,7 @@ module SwiftypeAppSearch
               end
 
       req = klass.new(uri.request_uri)
-      req.body = JSON.generate(params) unless params.length == 0
+      req.body = serialize_json(params) unless params.length == 0
 
       req['User-Agent'] = DEFAULT_USER_AGENT
       req['Content-Type'] = 'application/json'
