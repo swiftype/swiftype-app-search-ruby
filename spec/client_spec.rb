@@ -2,7 +2,7 @@ describe SwiftypeAppSearch::Client do
   let(:engine_name) { "ruby-client-test-#{Time.now.to_i}" }
 
   include_context "App Search Credentials"
-  let(:client) { SwiftypeAppSearch::Client.new(:account_host_key => as_account_host_key, :api_key => as_api_key) }
+  let(:client) { SwiftypeAppSearch::Client.new(client_options) }
 
   context 'Documents' do
     let(:document) { { 'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE' } }
@@ -38,6 +38,23 @@ describe SwiftypeAppSearch::Client do
           expect do
             subject
           end.to raise_error(SwiftypeAppSearch::InvalidDocument, /Invalid field/)
+        end
+      end
+
+      context 'when a document has a Ruby Time object' do
+        let(:time_rfc3339) { '2018-01-01T01:01:01+00:00' }
+        let(:time_object) { Time.parse(time_rfc3339) }
+        let(:document) { { 'created_at' => time_object } }
+
+        it 'should serialize the time object in RFC 3339' do
+          response = subject
+          expect(response).to have_key('id')
+          document_id = response.fetch('id')
+          expect do
+            documents = client.get_documents(engine_name, [document_id])
+            expect(documents.size).to eq(1)
+            expect(documents.first['created_at']).to eq(time_rfc3339)
+          end.to_not raise_error
         end
       end
     end
