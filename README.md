@@ -180,7 +180,7 @@ You can also run tests against a local environment by passing a `AS_API_ENDPOINT
 
 ```bash
 export AS_API_KEY="your API key"
-export AS_API__ENDPOINT="http://<your account host key>.api.127.0.0.1.ip.es.io:3002/api/as/v1"
+export AS_API_ENDPOINT="http://<your account host key>.api.127.0.0.1.ip.es.io:3002/api/as/v1"
 bundle exec rspec
 ```
 
