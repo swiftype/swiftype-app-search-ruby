@@ -5,8 +5,8 @@ require 'awesome_print'
 require 'swiftype-app-search'
 
 RSpec.shared_context "App Search Credentials" do
-  let(:as_api_key) { ENV.fetch('AS_API_KEY', 'API_KEY') }
-  let(:as_account_host_key) { ENV.fetch('AS_ACCOUNT_HOST_KEY', 'ACCOUNT_HOST_KEY') }
+  let(:as_api_key) { ENV.fetch('AS_API_KEY' || 'AS_PRIVATE_KEY', 'API_KEY' || 'PRIVATE_KEY') }
+  let(:as_account_host_key) { ENV.fetch('AS_ACCOUNT_HOST_KEY' || 'AS_HOST_IDENTIFIER', 'ACCOUNT_HOST_KEY' || 'HOST_IDENTIFIER') }
   let(:as_api_endpoint) { ENV.fetch('AS_API_ENDPOINT', nil) }
   let(:client_options) do
     {
