@@ -1,3 +1,3 @@
 module SwiftypeAppSearch
-  VERSION = '0.2.o'
+  VERSION = '0.2.0'
 end
