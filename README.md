@@ -16,7 +16,7 @@ Or place `gem 'swiftype-app-search', '~> 0.1.3` in your `Gemfile` and run `bundl
 
 Create a new instance of the Swiftype App Search Client. This requires your `[HOST_IDENTIFIER]`, which
 identifies the unique hostname of the Swiftype API that is associated with your Swiftype account.
-It also requires a valid `[API_KEY]`, which authenticates requests to the API. You can use any key type with the client, however each has a different scope. For information keys, check out the [documentation](https://swiftype.com/documentation/app-search/credentials).
+It also requires a valid `[API_KEY]`, which authenticates requests to the API. You can use any key type with the client, however each has a different scope. For more information on keys, check out the [documentation](https://swiftype.com/documentation/app-search/credentials).
 
 You can find your `[API_KEY]` and your `[HOST_IDENTIFIER]` within the [Credentials](https://app.swiftype.com/as/credentials) menu:
 
