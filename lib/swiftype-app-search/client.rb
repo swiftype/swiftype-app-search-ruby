@@ -20,13 +20,13 @@ module SwiftypeAppSearch
     #
     # @param options [Hash] a hash of configuration options that will override what is set on the SwiftypeAppSearch class.
     # @option options [String] :account_host_key or :host_identifier is your Host Identifier to use with this client.
-    # @option options [String] :api_key or :private_key is your Private API Key to use for this client
+    # @option options [String] :api_key can be any of your API Keys. Each has a different scope, so ensure you are using the correct key.
     # @option options [Numeric] :overall_timeout overall timeout for requests in seconds (default: 15s)
     # @option options [Numeric] :open_timeout the number of seconds Net::HTTP (default: 15s)
     #   will wait while opening a connection before raising a Timeout::Error
     def initialize(options = {})
       @api_endpoint = options.fetch(:api_endpoint) { "https://#{options.fetch(:account_host_key) || options.fetch(:host_identifier)}.api.swiftype.com/api/as/v1/" }
-      @api_key = options.fetch(:api_key) || options.fetch(:private_key)
+      @api_key = options.fetch(:api_key)
       @open_timeout = options.fetch(:open_timeout, DEFAULT_TIMEOUT).to_f
       @overall_timeout = options.fetch(:overall_timeout, DEFAULT_TIMEOUT).to_f
     end

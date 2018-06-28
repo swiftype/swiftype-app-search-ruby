@@ -16,8 +16,9 @@ Or place `gem 'swiftype-app-search', '~> 0.1.3` in your `Gemfile` and run `bundl
 
 Create a new instance of the Swiftype App Search Client. This requires your `[HOST_IDENTIFIER]`, which
 identifies the unique hostname of the Swiftype API that is associated with your Swiftype account.
-It also requires a valid `[PRIVATE_KEY]`, which authenticates requests to the API. You can find both of these within
-the [Credentials](https://app.swiftype.com/as/credentials) menu:
+It also requires a valid `[API_KEY]`, which authenticates requests to the API. You can use any key type with the client, however each has a different scope. For information keys, check out the [documentation](https://swiftype.com/documentation/app-search/credentials).
+
+You can find your `[API_KEY]` and your `[HOST_IDENTIFIER]` within the [Credentials](https://app.swiftype.com/as/credentials) menu:
 
 ```ruby
 client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-c5s2mj', :private_key => 'api-mu75psc5egt9ppzuycnc2mc3')
@@ -172,7 +173,7 @@ end
 ## Running Tests
 
 ```bash
-export PRIVATE_KEY="[AS_PRIVATE_KEY]"
+export PRIVATE_KEY="[AS_API_KEY]"
 export HOST_IDENTIFIER="[AS_HOST_IDENTIFIER]"
 bundle exec rspec
 ```
@@ -180,7 +181,7 @@ bundle exec rspec
 You can also run tests against a local environment by passing a `AS_API_ENDPOINT` environment variable
 
 ```bash
-export API_KEY="[AS_PRIVATE_KEY]"
+export API_KEY="[AS_API_KEY]"
 export API_ENDPOINT="http://[AS_HOST_IDENTIFIER].api.127.0.0.1.ip.es.io:3002/api/as/v1"
 bundle exec rspec
 ```
