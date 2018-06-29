@@ -25,7 +25,7 @@ module SwiftypeAppSearch
     # @option options [Numeric] :open_timeout the number of seconds Net::HTTP (default: 15s)
     #   will wait while opening a connection before raising a Timeout::Error
     def initialize(options = {})
-      @api_endpoint = options.fetch(:api_endpoint) { "https://#{options.fetch(:account_host_key) || options.fetch(:host_identifier)}.api.swiftype.com/api/as/v1/" }
+      @api_endpoint = options.fetch(:api_endpoint) { "https://#{options.fetch(:account_host_key) { options.fetch(:host_identifier) }}.api.swiftype.com/api/as/v1/" }
       @api_key = options.fetch(:api_key)
       @open_timeout = options.fetch(:open_timeout, DEFAULT_TIMEOUT).to_f
       @overall_timeout = options.fetch(:overall_timeout, DEFAULT_TIMEOUT).to_f

@@ -173,16 +173,16 @@ end
 ## Running Tests
 
 ```bash
-export PRIVATE_KEY="[AS_API_KEY]"
-export HOST_IDENTIFIER="[AS_HOST_IDENTIFIER]"
+export AS_API_KEY="[API_KEY]"
+export AS_HOST_IDENTIFIER="[HOST_IDENTIFIER]"
 bundle exec rspec
 ```
 
 You can also run tests against a local environment by passing a `AS_API_ENDPOINT` environment variable
 
 ```bash
-export API_KEY="[AS_API_KEY]"
-export API_ENDPOINT="http://[AS_HOST_IDENTIFIER].api.127.0.0.1.ip.es.io:3002/api/as/v1"
+export AS_API_KEY="[API_KEY]"
+export AS_API_ENDPOINT="http://[HOST_IDENTIFIER].api.127.0.0.1.ip.es.io:3002/api/as/v1"
 bundle exec rspec
 ```
 
