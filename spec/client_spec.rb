@@ -148,8 +148,13 @@ describe SwiftypeAppSearch::Client do
   end
 
   context 'Configuration' do
-    context 'account_host_key' do
+    context 'host_identifier' do
       it 'sets the base url correctly' do
+        client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-asdf', :api_key => 'foo')
+        expect(client.api_endpoint).to eq('https://host-asdf.api.swiftype.com/api/as/v1/')
+      end
+
+      it 'sets the base url correctly using deprecated as_host_key' do
         client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-asdf', :api_key => 'foo')
         expect(client.api_endpoint).to eq('https://host-asdf.api.swiftype.com/api/as/v1/')
       end

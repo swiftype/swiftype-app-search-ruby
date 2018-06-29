@@ -6,12 +6,13 @@ require 'swiftype-app-search'
 
 RSpec.shared_context "App Search Credentials" do
   let(:as_api_key) { ENV.fetch('AS_API_KEY', 'API_KEY') }
-  let(:as_account_host_key) { ENV.fetch('AS_ACCOUNT_HOST_KEY', 'ACCOUNT_HOST_KEY') }
+  # AS_ACCOUNT_HOST_KEY is deprecated
+  let(:as_host_identifier) { ENV['AS_ACCOUNT_HOST_KEY'] || ENV['AS_HOST_IDENTIFIER'] || 'ACCOUNT_HOST_KEY' }
   let(:as_api_endpoint) { ENV.fetch('AS_API_ENDPOINT', nil) }
   let(:client_options) do
     {
       :api_key => as_api_key,
-      :account_host_key => as_account_host_key
+      :host_identifier => as_host_identifier
     }.tap do |opts|
       opts[:api_endpoint] = as_api_endpoint unless as_api_endpoint.nil?
     end
