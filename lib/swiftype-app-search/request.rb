@@ -6,7 +6,8 @@ require 'swiftype-app-search/version'
 require 'openssl'
 
 module SwiftypeAppSearch
-  DEFAULT_USER_AGENT = "swiftype-app-search-ruby/#{SwiftypeAppSearch::VERSION}"
+  CLIENT_NAME = 'swiftype-app-search-ruby'
+  CLIENT_VERSION = SwiftypeAppSearch::VERSION
 
   module Request
     attr_accessor :last_request
@@ -133,7 +134,8 @@ module SwiftypeAppSearch
       req = klass.new(uri.request_uri)
       req.body = serialize_json(params) unless params.length == 0
 
-      req['User-Agent'] = DEFAULT_USER_AGENT
+      req['X-Swiftype-Client'] = CLIENT_NAME
+      req['X-Swiftype-Client-Version'] = CLIENT_VERSION
       req['Content-Type'] = 'application/json'
       req['Authorization'] = "Bearer #{api_key}"
 

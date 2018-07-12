@@ -1,8 +1,10 @@
 require 'bundler/setup'
 require 'rspec'
-require 'webmock'
+require 'webmock/rspec'
 require 'awesome_print'
 require 'swiftype-app-search'
+
+WebMock.allow_net_connect!
 
 RSpec.shared_context "App Search Credentials" do
   let(:as_api_key) { ENV.fetch('AS_API_KEY', 'API_KEY') }

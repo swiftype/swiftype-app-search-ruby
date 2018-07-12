@@ -1,8 +1,23 @@
+
 describe SwiftypeAppSearch::Client do
   let(:engine_name) { "ruby-client-test-#{Time.now.to_i}" }
 
   include_context "App Search Credentials"
   let(:client) { SwiftypeAppSearch::Client.new(client_options) }
+
+  describe 'Requests' do
+    it 'should include client name and version in headers' do
+      stub_request(:any, "#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines")
+      client.list_engines
+      expect(WebMock).to have_requested(:get, "https://#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines").
+        with(
+          headers: {
+            'X-Swiftype-Client' => 'swiftype-app-search-ruby',
+            'X-Swiftype-Client-Version' => SwiftypeAppSearch::VERSION
+          }
+        )
+    end
+  end
 
   context 'Documents' do
     let(:document) { { 'url' => 'http://www.youtube.com/watch?v=v1uyQZNg2vE' } }
