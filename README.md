@@ -23,7 +23,7 @@ It also requires a valid `[API_KEY]`, which authenticates requests to the API. Y
 You can find your `[API_KEY]` and your `[HOST_IDENTIFIER]` within the [Credentials](https://app.swiftype.com/as/credentials) menu:
 
 ```ruby
-client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
+client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
 ```
 
 ### API Methods
@@ -31,24 +31,7 @@ client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-c5s2mj', :api_k
 This client is a thin interface to the Swiftype App Search Api. Additional details for requests and responses can be
 found in the [documentation](https://swiftype.com/documentation/app-search).
 
-#### Indexing: Creating or Updating a Single Document
 
-```ruby
-engine_name = 'favorite-videos'
-document = {
-  :id => 'INscMGmhmX4',
-  :url => 'https://www.youtube.com/watch?v=INscMGmhmX4',
-  :title => 'The Original Grumpy Cat',
-  :body => 'A wonderful video of a magnificent cat.'
-}
-
-begin
-  response = client.index_document(engine_name, document)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
-```
 
 #### Indexing: Creating or Updating Documents
 
