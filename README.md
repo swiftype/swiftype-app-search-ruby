@@ -23,7 +23,7 @@ It also requires a valid `[API_KEY]`, which authenticates requests to the API. Y
 You can find your `[API_KEY]` and your `[HOST_IDENTIFIER]` within the [Credentials](https://app.swiftype.com/as/credentials) menu:
 
 ```ruby
-client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
+client = SwiftypeAppSearch::Client.new(:account_host_key => 'host-c5s2mj', :api_key => 'private-mu75psc5egt9ppzuycnc2mc3')
 ```
 
 ### API Methods
