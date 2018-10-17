@@ -5,13 +5,23 @@ module SwiftypeAppSearch
   class Client
     module Documents
 
+      # Retrieve all Documents from the API for the {App Search API}[https://swiftype.com/documentation/app-search/]
+      #
+      # @param [String] engine_name the unique Engine names
+      # @option options see the {App Search API}[https://swiftype.com/documentation/app-search/] for supported options.
+      #
+      # @return [Array<Hash>] an Array of Documents
+      def list_documents(engine_name, options = {})
+        params = Utils.symbolize_keys(options)
+        request(:get, "engines/#{engine_name}/documents/list", params)
+      end
+
       # Retrieve Documents from the API by IDs for the {App Search API}[https://swiftype.com/documentation/app-search/]
       #
       # @param [String] engine_name the unique Engine name
       # @param [Array<String>] ids an Array of Document IDs
       #
-      # @return [Array<Hash>] an Array of Documents
-
+      # @return [Hash] list results
       def get_documents(engine_name, ids)
         get("engines/#{engine_name}/documents", ids)
       end

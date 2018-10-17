@@ -98,6 +98,118 @@ describe SwiftypeAppSearch::Client do
         end
       end
     end
+
+    describe '#get_documents' do
+      let(:documents) { [first_document, second_document] }
+      let(:first_document_id) { 'id' }
+      let(:first_document) { { 'id' => first_document_id, 'url' => 'https://www.youtube.com/watch?v=v1uyQZNg2vE' } }
+      let(:second_document_id) { 'another_id' }
+      let(:second_document) { { 'id' => second_document_id, 'url' => 'https://www.youtube.com/watch?v=9T1vfsHYiKY' } }
+
+      subject { client.get_documents(engine_name, [first_document_id, second_document_id]) }
+
+      before do
+        client.index_documents(engine_name, documents)
+      end
+
+      it 'will return documents by id' do
+        response = subject
+        expect(response.size).to eq(2)
+        expect(response[0]['id']).to eq(first_document_id)
+        expect(response[1]['id']).to eq(second_document_id)
+      end
+    end
+
+    describe '#list_documents' do
+      let(:documents) { [first_document, second_document] }
+      let(:first_document_id) { 'id' }
+      let(:first_document) { { 'id' => first_document_id, 'url' => 'https://www.youtube.com/watch?v=v1uyQZNg2vE' } }
+      let(:second_document_id) { 'another_id' }
+      let(:second_document) { { 'id' => second_document_id, 'url' => 'https://www.youtube.com/watch?v=9T1vfsHYiKY' } }
+
+      before do
+        client.index_documents(engine_name, documents)
+      end
+
+      context 'when no options are specified' do
+        it 'will return all documents' do
+          response = client.list_documents(engine_name)
+          expect(response['results'].size).to eq(2)
+          expect(response['results'][0]['id']).to eq(first_document_id)
+          expect(response['results'][1]['id']).to eq(second_document_id)
+        end
+      end
+
+      context 'when options are specified' do
+        it 'will return all documents' do
+          response = client.list_documents(engine_name, {page: { size: 1, current: 2}})
+          expect(response['results'].size).to eq(1)
+          expect(response['results'][0]['id']).to eq(second_document_id)
+        end
+      end
+    end
+  end
+
+  context 'Search' do
+    # Note that since indexing a document takes up to a minute,
+    # don't actually expect results to be present, just that
+    # the request was made
+
+    before do
+      client.create_engine(engine_name) rescue SwiftypeAppSearch::BadRequest
+    end
+
+    after do
+      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
+    end
+
+    describe '#search' do
+      subject { client.search(engine_name, query, options) }
+      let (:query) { '' }
+      let (:options) { { 'page' => { 'size' => 1 } } }
+
+      it 'should execute a search query' do
+        response = subject
+        expect(response).to have_key('meta')
+        expect(response).to have_key('results')
+      end
+    end
+
+    describe '#multi_search' do
+      subject { client.multi_search(engine_name, queries) }
+
+      context 'when options are provided' do
+        let (:queries) { [
+          {'query': 'foo', 'options' => { 'page' => { 'size' => 1 } }},
+          {'query': 'bar', 'options' => { 'page' => { 'size' => 1 } }}
+        ] }
+
+        it 'should execute a multi search query' do
+          response = subject
+          expect(response.size).to eq(2)
+          expect(response[0]).to have_key('results')
+          expect(response[0]).to have_key('meta')
+          expect(response[1]).to have_key('results')
+          expect(response[1]).to have_key('meta')
+        end
+      end
+
+      context 'when options are omitted' do
+        let (:queries) { [
+          {'query': 'foo' },
+          {'query': 'bar' }
+        ] }
+
+        it 'should execute a multi search query' do
+          response = subject
+          expect(response.size).to eq(2)
+          expect(response[0]).to have_key('results')
+          expect(response[0]).to have_key('meta')
+          expect(response[1]).to have_key('results')
+          expect(response[1]).to have_key('meta')
+        end
+      end
+    end
   end
 
   context 'Engines' do
