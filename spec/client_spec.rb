@@ -249,6 +249,12 @@ describe SwiftypeAppSearch::Client do
         expect { client.get_engine(engine_name) }.to_not raise_error
       end
 
+      it 'should accept an optional language parameter' do
+        expect { client.get_engine(engine_name) }.to raise_error(SwiftypeAppSearch::NonExistentRecord)
+        client.create_engine(engine_name, 'da')
+        expect(client.get_engine(engine_name)).to match('name' => anything, 'type' => anything, 'language' => 'da')
+      end
+
       it 'should return an engine object' do
         engine = client.create_engine(engine_name)
         expect(engine).to be_kind_of(Hash)

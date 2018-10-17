@@ -11,8 +11,10 @@ module SwiftypeAppSearch
         get("engines/#{engine_name}")
       end
 
-      def create_engine(engine_name)
-        post("engines", :name => engine_name)
+      def create_engine(engine_name, language = nil)
+        params = { :name => engine_name }
+        params[:language] = language if language
+        post("engines", params)
       end
 
       def destroy_engine(engine_name)
