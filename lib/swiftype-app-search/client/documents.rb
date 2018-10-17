@@ -7,7 +7,7 @@ module SwiftypeAppSearch
 
       # Retrieve all Documents from the API for the {App Search API}[https://swiftype.com/documentation/app-search/]
       #
-      # @param [String] engine_name the unique Engine names
+      # @param [String] engine_name the unique Engine name
       # @option options see the {App Search API}[https://swiftype.com/documentation/app-search/] for supported options.
       #
       # @return [Array<Hash>] an Array of Documents
