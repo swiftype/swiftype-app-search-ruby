@@ -42,15 +42,10 @@ document = {
   :body => 'A wonderful video of a magnificent cat.'
 }
 
-begin
-  response = client.index_document(engine_name, document)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.index_document(engine_name, document)
 ```
 
-#### Indexing: Creating or Updating Documents
+#### Indexing: Creating or Replacing Documents
 
 ```ruby
 engine_name = 'favorite-videos'
@@ -69,26 +64,37 @@ documents = [
   }
 ]
 
-begin
-  response = client.index_documents(engine_name, documents)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.index_documents(engine_name, documents)
 ```
 
-#### Listing Documents
+#### Indexing: Updating Documents (Partial Updates)
+
+```ruby
+engine_name = 'favorite-videos'
+documents = [
+  {
+    :id => 'INscMGmhmX4',
+    :title => 'Updated title'
+  }
+]
+
+client.update_documents(engine_name, documents)
+```
+
+#### Retrieving Documents
 
 ```ruby
 engine_name = 'favorite-videos'
 document_ids = ['INscMGmhmX4', 'JNDFojsd02']
 
-begin
-  response = client.get_documents(engine_name, document_ids)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.get_documents(engine_name, document_ids)
+```
+
+#### Listing Documents
+```ruby
+engine_name = 'favorite-videos'
+
+client.list_documents(engine_name)
 ```
 
 #### Destroying Documents
@@ -97,23 +103,13 @@ end
 engine_name = 'favorite-videos'
 document_ids = ['INscMGmhmX4', 'JNDFojsd02']
 
-begin
-  response = client.destroy_documents(engine_name, document_ids)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.destroy_documents(engine_name, document_ids)
 ```
 
 #### Listing Engines
 
 ```ruby
-begin
-  response = client.list_engines
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.list_engines
 ```
 
 #### Retrieving Engines
@@ -121,12 +117,7 @@ end
 ```ruby
 engine_name = 'favorite-videos'
 
-begin
-  response = client.get_engine(engine_name)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.get_engine(engine_name)
 ```
 
 #### Creating Engines
@@ -134,12 +125,7 @@ end
 ```ruby
 engine_name = 'favorite-videos'
 
-begin
-  response = client.create_engine(engine_name)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.create_engine(engine_name)
 ```
 
 #### Destroying Engines
@@ -147,12 +133,7 @@ end
 ```ruby
 engine_name = 'favorite-videos'
 
-begin
-  response = client.destroy_engine(engine_name)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.destroy_engine(engine_name)
 ```
 
 #### Searching
@@ -164,12 +145,23 @@ search_fields = { :title => {} }
 result_fields = { :title => { :raw => {} } }
 options = { :search_fields => search_fields, :result_fields => result_fields }
 
-begin
-  response = client.search(engine_name, query, options)
-  puts response
-rescue SwiftypeAppSearch::ClientException => e
-  puts e
-end
+client.search(engine_name, query, options)
+```
+
+#### Multi-Search
+
+```ruby
+engine_name = 'favorite-videos'
+
+queries = [{
+  :query => 'cat',
+  :options => { :search_fields => { :title => {} }}
+},{
+  :query => 'dog',
+  :options => { :search_fields => { :body => {} }}
+}]
+
+client.multi_search(engine_name, queries)
 ```
 
 ## Running Tests
