@@ -99,6 +99,31 @@ describe SwiftypeAppSearch::Client do
       end
     end
 
+    describe '#update_documents' do
+      let(:documents) { [document, second_document] }
+      let(:second_document_id) { 'another_id' }
+      let(:second_document) { { 'id' => second_document_id, 'url' => 'https://www.youtube.com/watch?v=9T1vfsHYiKY' } }
+      let(:updates) { [ {
+        'id' => second_document_id,
+        'url' => 'https://www.example.com'
+      } ] }
+
+      subject { client.update_documents(engine_name, updates) }
+
+      before do
+        client.index_documents(engine_name, documents)
+      end
+
+      # Note that since indexing a document takes up to a minute,
+      # we don't expect this to succeed, so we simply verify that
+      # the request responded with the correct 'id', even though
+      # the 'errors' object likely contains errors.
+      it 'should update existing documents' do
+        response = subject
+        expect(subject).to match(['id' => second_document_id, 'errors' => anything])
+      end
+    end
+
     describe '#get_documents' do
       let(:documents) { [first_document, second_document] }
       let(:first_document_id) { 'id' }

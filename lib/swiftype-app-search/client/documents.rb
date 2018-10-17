@@ -56,6 +56,20 @@ module SwiftypeAppSearch
         post("engines/#{engine_name}/documents", documents)
       end
 
+      # Update a batch of documents using the {App Search API}[https://swiftype.com/documentation/app-search/].
+      #
+      # @param [String] engine_name the unique Engine name
+      # @param [Array] documents an Array of Document Hashes including valid ids
+      #
+      # @return [Array<Hash>] an Array of processed Document Status hashes
+      #
+      # @raise [SwiftypeAppSearch::InvalidDocument] when any documents have processing errors returned from the api
+      # @raise [Timeout::Error] when timeout expires waiting for statuses
+      def update_documents(engine_name, documents)
+        documents.map! { |document| normalize_document(document) }
+        patch("engines/#{engine_name}/documents", documents)
+      end
+
       # Destroy a batch of documents given a list of IDs
       #
       # @param [Array<String>] ids an Array of Document IDs
