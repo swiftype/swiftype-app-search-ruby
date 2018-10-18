@@ -1,9 +1,41 @@
+require 'config_helper'
 
 describe SwiftypeAppSearch::Client do
   let(:engine_name) { "ruby-client-test-#{Time.now.to_i}" }
 
   include_context "App Search Credentials"
   let(:client) { SwiftypeAppSearch::Client.new(client_options) }
+
+  before(:all) do
+    # Bootstraps a static engine for 'read-only' options that require indexing
+    # across the test suite
+    @static_engine_name = "ruby-client-test-static-#{Time.now.to_i}"
+    as_api_key = ConfigHelper.get_as_api_key
+    as_host_identifier = ConfigHelper.get_as_host_identifier
+    as_api_endpoint = ConfigHelper.get_as_api_endpoint
+    client_options = ConfigHelper.get_client_options(as_api_key, as_host_identifier, as_api_endpoint)
+    @static_client = SwiftypeAppSearch::Client.new(client_options)
+    @static_client.create_engine(@static_engine_name)
+
+    @document1 = { 'id' => '1', 'title': 'The Great Gatsby' }
+    @document2 = { 'id' => '2', 'title': 'Catcher in the Rye' }
+    @documents = [@document1, @document2]
+    @static_client.index_documents(@static_engine_name, @documents)
+
+    # Wait until documents are indexed
+    start = Time.now
+    ready = false
+    while (!ready)
+      sleep(3)
+      results = @static_client.search(@static_engine_name, '')
+      ready = true if results['results'].length == 2
+      ready = true if (Time.now - start).to_i >= 120 # Time out after 2 minutes
+    end
+  end
+
+  after(:all) do
+    @static_client.destroy_engine(@static_engine_name)
+  end
 
   describe 'Requests' do
     it 'should include client name and version in headers' do
@@ -176,62 +208,79 @@ describe SwiftypeAppSearch::Client do
   end
 
   context 'Search' do
-    # Note that since indexing a document takes up to a minute,
-    # don't actually expect results to be present, just that
-    # the request was made
-
-    before do
-      client.create_engine(engine_name) rescue SwiftypeAppSearch::BadRequest
-    end
-
-    after do
-      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
-    end
-
     describe '#search' do
-      subject { client.search(engine_name, query, options) }
+      subject { @static_client.search(@static_engine_name, query, options) }
       let (:query) { '' }
-      let (:options) { { 'page' => { 'size' => 1 } } }
+      let (:options) { { 'page' => { 'size' => 2 } } }
 
       it 'should execute a search query' do
         response = subject
-        expect(response).to have_key('meta')
-        expect(response).to have_key('results')
+        expect(response).to match({
+          'meta' => anything,
+          'results' => [ anything, anything ]
+        })
       end
     end
 
     describe '#multi_search' do
-      subject { client.multi_search(engine_name, queries) }
+      subject { @static_client.multi_search(@static_engine_name, queries) }
 
       context 'when options are provided' do
         let (:queries) { [
-          {'query': 'foo', 'options' => { 'page' => { 'size' => 1 } }},
-          {'query': 'bar', 'options' => { 'page' => { 'size' => 1 } }}
+          { 'query' => 'gatsby', 'options' => { 'page' => { 'size' => 1 } } },
+          { 'query' => 'catcher', 'options' => { 'page' => { 'size' => 1 } } }
         ] }
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response.size).to eq(2)
-          expect(response[0]).to have_key('results')
-          expect(response[0]).to have_key('meta')
-          expect(response[1]).to have_key('results')
-          expect(response[1]).to have_key('meta')
+          expect(response).to match([
+            {
+              'meta' => anything,
+              'results' => [ { 'id' => { 'raw' => '1' }, 'title' => anything, '_meta' => anything } ]
+            },
+            {
+              'meta' => anything,
+              'results' => [ { 'id' => { 'raw' => '2' }, 'title' => anything, '_meta' => anything } ]
+            }
+          ])
         end
       end
 
       context 'when options are omitted' do
         let (:queries) { [
-          {'query': 'foo' },
-          {'query': 'bar' }
+          { 'query' => 'gatsby' },
+          { 'query' => 'catcher' }
         ] }
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response.size).to eq(2)
-          expect(response[0]).to have_key('results')
-          expect(response[0]).to have_key('meta')
-          expect(response[1]).to have_key('results')
-          expect(response[1]).to have_key('meta')
+          expect(response).to match([
+            {
+              'meta' => anything,
+              'results' => [ { 'id' => { 'raw' => '1' }, 'title' => anything, '_meta' => anything } ]
+            },
+            {
+              'meta' => anything,
+              'results' => [ { 'id' => { 'raw' => '2' }, 'title' => anything, '_meta' => anything } ]
+            }
+          ])
+        end
+      end
+
+      context 'when a search is bad' do
+        let (:queries) {  [{
+          'query' => 'cat',
+          'options' => { 'search_fields' => { 'taco' => {} }}
+        },{
+          'query' => 'dog',
+          'options' => { 'search_fields' => { 'body' => {} }}
+        }] }
+
+        it 'should throw an appropriate error' do
+          expect { subject }.to raise_error do |e|
+            expect(e).to be_a(SwiftypeAppSearch::BadRequest)
+            expect(e.errors).to eq(['Search fields contains invalid field: taco', 'Search fields contains invalid field: body'])
+          end
         end
       end
     end
