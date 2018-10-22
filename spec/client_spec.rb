@@ -1,17 +1,49 @@
+require 'config_helper'
 
 describe SwiftypeAppSearch::Client do
   let(:engine_name) { "ruby-client-test-#{Time.now.to_i}" }
 
-  include_context "App Search Credentials"
+  include_context 'App Search Credentials'
   let(:client) { SwiftypeAppSearch::Client.new(client_options) }
+
+  before(:all) do
+    # Bootstraps a static engine for 'read-only' options that require indexing
+    # across the test suite
+    @static_engine_name = "ruby-client-test-static-#{Time.now.to_i}"
+    as_api_key = ConfigHelper.get_as_api_key
+    as_host_identifier = ConfigHelper.get_as_host_identifier
+    as_api_endpoint = ConfigHelper.get_as_api_endpoint
+    client_options = ConfigHelper.get_client_options(as_api_key, as_host_identifier, as_api_endpoint)
+    @static_client = SwiftypeAppSearch::Client.new(client_options)
+    @static_client.create_engine(@static_engine_name)
+
+    @document1 = { 'id' => '1', 'title' => 'The Great Gatsby' }
+    @document2 = { 'id' => '2', 'title' => 'Catcher in the Rye' }
+    @documents = [@document1, @document2]
+    @static_client.index_documents(@static_engine_name, @documents)
+
+    # Wait until documents are indexed
+    start = Time.now
+    ready = false
+    until (ready)
+      sleep(3)
+      results = @static_client.search(@static_engine_name, '')
+      ready = true if results['results'].length == 2
+      ready = true if (Time.now - start).to_i >= 120 # Time out after 2 minutes
+    end
+  end
+
+  after(:all) do
+    @static_client.destroy_engine(@static_engine_name)
+  end
 
   describe 'Requests' do
     it 'should include client name and version in headers' do
       stub_request(:any, "#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines")
       client.list_engines
-      expect(WebMock).to have_requested(:get, "https://#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines").
-        with(
-          headers: {
+      expect(WebMock).to have_requested(:get, "https://#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines")
+        .with(
+          :headers => {
             'X-Swiftype-Client' => 'swiftype-app-search-ruby',
             'X-Swiftype-Client-Version' => SwiftypeAppSearch::VERSION
           }
@@ -81,20 +113,24 @@ describe SwiftypeAppSearch::Client do
       subject { client.index_documents(engine_name, documents) }
 
       it 'should return an array of document status hashes' do
-        expect(subject).to match([
-          { 'id' => anything, 'errors' => [] },
-          { 'id' => second_document_id, 'errors' => [] }
-        ])
+        expect(subject).to match(
+          [
+            { 'id' => anything, 'errors' => [] },
+            { 'id' => second_document_id, 'errors' => [] }
+          ]
+        )
       end
 
       context 'when one of the documents has processing errors' do
         let(:second_document) { { 'id' => 'too long' * 100 } }
 
         it 'should return respective errors in an array of document processing hashes' do
-          expect(subject).to match([
-            { 'id' => anything, 'errors' => [] },
-            { 'id' => anything, 'errors' => ['Invalid field type: id must be less than 800 characters'] },
-          ])
+          expect(subject).to match(
+            [
+              { 'id' => anything, 'errors' => [] },
+              { 'id' => anything, 'errors' => ['Invalid field type: id must be less than 800 characters'] },
+            ]
+          )
         end
       end
     end
@@ -103,10 +139,14 @@ describe SwiftypeAppSearch::Client do
       let(:documents) { [document, second_document] }
       let(:second_document_id) { 'another_id' }
       let(:second_document) { { 'id' => second_document_id, 'url' => 'https://www.youtube.com/watch?v=9T1vfsHYiKY' } }
-      let(:updates) { [ {
-        'id' => second_document_id,
-        'url' => 'https://www.example.com'
-      } ] }
+      let(:updates) do
+        [
+          {
+            'id' => second_document_id,
+            'url' => 'https://www.example.com'
+          }
+        ]
+      end
 
       subject { client.update_documents(engine_name, updates) }
 
@@ -119,7 +159,6 @@ describe SwiftypeAppSearch::Client do
       # the request responded with the correct 'id', even though
       # the 'errors' object likely contains errors.
       it 'should update existing documents' do
-        response = subject
         expect(subject).to match(['id' => second_document_id, 'errors' => anything])
       end
     end
@@ -167,7 +206,7 @@ describe SwiftypeAppSearch::Client do
 
       context 'when options are specified' do
         it 'will return all documents' do
-          response = client.list_documents(engine_name, {page: { size: 1, current: 2}})
+          response = client.list_documents(engine_name, :page => { :size => 1, :current => 2 })
           expect(response['results'].size).to eq(1)
           expect(response['results'][0]['id']).to eq(second_document_id)
         end
@@ -176,62 +215,90 @@ describe SwiftypeAppSearch::Client do
   end
 
   context 'Search' do
-    # Note that since indexing a document takes up to a minute,
-    # don't actually expect results to be present, just that
-    # the request was made
-
-    before do
-      client.create_engine(engine_name) rescue SwiftypeAppSearch::BadRequest
-    end
-
-    after do
-      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
-    end
-
     describe '#search' do
-      subject { client.search(engine_name, query, options) }
-      let (:query) { '' }
-      let (:options) { { 'page' => { 'size' => 1 } } }
+      subject { @static_client.search(@static_engine_name, query, options) }
+      let(:query) { '' }
+      let(:options) { { 'page' => { 'size' => 2 } } }
 
       it 'should execute a search query' do
-        response = subject
-        expect(response).to have_key('meta')
-        expect(response).to have_key('results')
+        expect(subject).to match(
+          'meta' => anything,
+          'results' => [anything, anything]
+        )
       end
     end
 
     describe '#multi_search' do
-      subject { client.multi_search(engine_name, queries) }
+      subject { @static_client.multi_search(@static_engine_name, queries) }
 
       context 'when options are provided' do
-        let (:queries) { [
-          {'query': 'foo', 'options' => { 'page' => { 'size' => 1 } }},
-          {'query': 'bar', 'options' => { 'page' => { 'size' => 1 } }}
-        ] }
+        let(:queries) do
+          [
+            { 'query' => 'gatsby', 'options' => { 'page' => { 'size' => 1 } } },
+            { 'query' => 'catcher', 'options' => { 'page' => { 'size' => 1 } } }
+          ]
+        end
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response.size).to eq(2)
-          expect(response[0]).to have_key('results')
-          expect(response[0]).to have_key('meta')
-          expect(response[1]).to have_key('results')
-          expect(response[1]).to have_key('meta')
+          expect(response).to match(
+            [
+              {
+                'meta' => anything,
+                'results' => [{ 'id' => { 'raw' => '1' }, 'title' => anything, '_meta' => anything }]
+              },
+              {
+                'meta' => anything,
+                'results' => [{ 'id' => { 'raw' => '2' }, 'title' => anything, '_meta' => anything }]
+              }
+            ]
+          )
         end
       end
 
       context 'when options are omitted' do
-        let (:queries) { [
-          {'query': 'foo' },
-          {'query': 'bar' }
-        ] }
+        let(:queries) do
+          [
+            { 'query' => 'gatsby' },
+            { 'query' => 'catcher' }
+          ]
+        end
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response.size).to eq(2)
-          expect(response[0]).to have_key('results')
-          expect(response[0]).to have_key('meta')
-          expect(response[1]).to have_key('results')
-          expect(response[1]).to have_key('meta')
+          expect(response).to match(
+            [
+              {
+                'meta' => anything,
+                'results' => [{ 'id' => { 'raw' => '1' }, 'title' => anything, '_meta' => anything }]
+              },
+              {
+                'meta' => anything,
+                'results' => [{ 'id' => { 'raw' => '2' }, 'title' => anything, '_meta' => anything }]
+              }
+            ]
+          )
+        end
+      end
+
+      context 'when a search is bad' do
+        let(:queries) do
+          [
+            {
+              'query' => 'cat',
+              'options' => { 'search_fields' => { 'taco' => {} } }
+            }, {
+              'query' => 'dog',
+              'options' => { 'search_fields' => { 'body' => {} } }
+            }
+          ]
+        end
+
+        it 'should throw an appropriate error' do
+          expect { subject }.to raise_error do |e|
+            expect(e).to be_a(SwiftypeAppSearch::BadRequest)
+            expect(e.errors).to eq(['Search fields contains invalid field: taco', 'Search fields contains invalid field: body'])
+          end
         end
       end
     end
