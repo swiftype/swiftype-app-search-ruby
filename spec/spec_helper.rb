@@ -7,7 +7,7 @@ require 'config_helper'
 
 WebMock.allow_net_connect!
 
-RSpec.shared_context "App Search Credentials" do
+RSpec.shared_context 'App Search Credentials' do
   let(:as_api_key) { ConfigHelper.get_as_api_key }
   # AS_ACCOUNT_HOST_KEY is deprecated
   let(:as_host_identifier) { ConfigHelper.get_as_host_identifier }
@@ -22,5 +22,5 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = "random"
+  config.order = 'random'
 end

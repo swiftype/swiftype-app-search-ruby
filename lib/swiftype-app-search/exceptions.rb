@@ -3,10 +3,10 @@ module SwiftypeAppSearch
     attr_reader :errors
 
     def initialize(response)
-      if response.kind_of?(Array)
-        @errors = response.map{ |r| r['errors'] }.flatten
+      @errors = if response.is_a?(Array)
+        response.flat_map { |r| r['errors'] }
       else
-        @errors = response['errors'] || [ response ]
+        response['errors'] || [response]
       end
       message = (errors.count == 1) ? "Error: #{errors.first}" : "Errors: #{errors.inspect}"
       super(message)
