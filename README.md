@@ -10,7 +10,7 @@ To install the gem, execute:
 gem install swiftype-app-search
 ```
 
-Or place `gem 'swiftype-app-search', '~> 0.4.1` in your `Gemfile` and run `bundle install`.
+Or place `gem 'swiftype-app-search', '~> 0.4.2` in your `Gemfile` and run `bundle install`.
 
 ## Usage
 
