@@ -43,7 +43,6 @@ module SwiftypeAppSearch
         #
         # @return [String] the JWT to use for authentication
         def create_signed_search_key(api_key, api_key_name, options = {})
-          raise 'Must create signed search key with an API Key, cannot use a Search Key' unless api_key.start_with?('api')
           payload = Utils.symbolize_keys(options).merge(:api_key_name => api_key_name)
           JWT.encode(payload, api_key, ALGORITHM)
         end

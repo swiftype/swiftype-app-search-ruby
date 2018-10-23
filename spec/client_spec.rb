@@ -37,6 +37,26 @@ describe SwiftypeAppSearch::Client do
     @static_client.destroy_engine(@static_engine_name)
   end
 
+  describe '#create_signed_search_key' do
+    let(:key) { 'private-xxxxxxxxxxxxxxxxxxxx' }
+    let(:api_key_name) { 'private-key' }
+    let(:enforced_options) do
+      {
+        'query' => 'cat'
+      }
+    end
+
+    subject do
+      SwiftypeAppSearch::Client.create_signed_search_key(key, api_key_name, enforced_options)
+    end
+
+    it 'should build a valid jwt' do
+      decoded_token = JWT.decode subject, key, true, { algorithm: 'HS256' }
+      expect(decoded_token[0]['api_key_name']).to eq(api_key_name)
+      expect(decoded_token[0]['query']).to eq('cat')
+    end
+  end
+
   describe 'Requests' do
     it 'should include client name and version in headers' do
       stub_request(:any, "#{client_options[:host_identifier]}.api.swiftype.com/api/as/v1/engines")
