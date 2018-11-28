@@ -23,7 +23,17 @@ It also requires a valid `[API_KEY]`, which authenticates requests to the API. Y
 You can find your `[API_KEY]` and your `[HOST_IDENTIFIER]` within the [Credentials](https://app.swiftype.com/as/credentials) menu:
 
 ```ruby
-client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-c5s2mj', :api_key => 'api-mu75psc5egt9ppzuycnc2mc3')
+client = SwiftypeAppSearch::Client.new(:host_identifier => 'host-c5s2mj', :api_key => 'private-mu75psc5egt9ppzuycnc2mc3')
+```
+
+### Using with App Search Managed Deploys
+
+The client can be configured to use a managed deploy by using the
+`api_endpoint` parameter. Since managed deploys do not rely on a `[HOST_IDENTIFIER]`
+, it can be omitted.
+
+```ruby
+client = SwiftypeAppSearch::Client.new(:api_key => 'private-mu75psc5egt9ppzuycnc2mc3', :api_endpoint => 'http://localhost:3002/api/as/v1/')
 ```
 
 ### API Methods
