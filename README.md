@@ -7,7 +7,7 @@
 
 ## Contents
 
-+ [Getting started](#getting-started-)
++ [Getting started](#start-)
 + [Usage](#usage)
 + [Running Tests](#running-tests)
 + [Debugging API Calls](#debugging-api-calls)
@@ -17,7 +17,7 @@
 
 ***
 
-## Getting started ☀️
+## Start ☀️
 
 To install the gem, execute:
 
