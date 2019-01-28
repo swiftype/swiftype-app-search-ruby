@@ -17,7 +17,7 @@
 
 ***
 
-## Getting started ☀️
+## Getting started 🐣
 
 To install the gem, execute:
 
