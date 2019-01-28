@@ -7,13 +7,13 @@
 
 ## Contents
 
-+ [Getting started](#getting-started)
++ [Getting started](#getting-started-)
 + [Usage](#usage)
 + [Running Tests](#running-tests)
 + [Debugging API Calls](#debugging-api-calls)
-+ [FAQ](#faq)
-+ [Contribute](#contribute)
-+ [License](#license)
++ [FAQ](#faq-)
++ [Contribute](#contribute-)
++ [License](#license-)
 
 ***
 
@@ -218,7 +218,7 @@ If you need to debug an API call made by the client, there are a few things you 
    to Swiftype Customer Support to help us quickly find your API request and help you troubleshoot
    your issues.
 
-## FAQ :female-detective:
+## FAQ :crystal_ball:
 
 ### Where do I report issues with the client?
 
