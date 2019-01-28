@@ -2,7 +2,7 @@
 
 <p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a><a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
-> A first-party Ruby client for building excellent, relevant search experiences with Elastic App Search.
+> A first-party Ruby client for building excellent, relevant search experiences with [Elastic App Search](https://www.elastic.co/cloud/app-search-service).
 
 ## Contents
 
