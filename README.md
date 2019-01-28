@@ -1,8 +1,6 @@
 <p align="center"><img src="https://raw.githubusercontent.com/swiftype/swiftype-app-search-ruby/master/logo-app-search.png" alt="Elastic App Search Logo"></p>
 
-<p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a>
-
-<a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
+<p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a><a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
 > A first-party Ruby client for building excellent, relevant search experiences with Elastic App Search.
 
@@ -219,7 +217,7 @@ If you need to debug an API call made by the client, there are a few things you 
    to Swiftype Customer Support to help us quickly find your API request and help you troubleshoot
    your issues.
 
-## FAQ :female-detective:
+## FAQ :crystal_ball:
 
 ### Where do I report issues with the client?
 
