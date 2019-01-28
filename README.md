@@ -16,7 +16,7 @@
 
 ***
 
-## Getting started :sunny: [#getting-started]
+## Getting started :sunny: (#getting-started)
 
 To install the gem, execute:
 
@@ -26,7 +26,7 @@ gem install swiftype-app-search
 
 Or place `gem 'swiftype-app-search', '~> 0.4.4'` in your `Gemfile` and run `bundle install`.
 
-## Usage [#usage]
+## Usage (#usage)
 
 ### Configuring the client, authentication
 
@@ -188,7 +188,7 @@ queries = [{
 client.multi_search(engine_name, queries)
 ```
 
-## Running Tests [#tests]
+## Running Tests (#tests)
 
 ```bash
 export AS_API_KEY="[API_KEY]"
@@ -204,7 +204,7 @@ export AS_API_ENDPOINT="http://[HOST_IDENTIFIER].api.127.0.0.1.ip.es.io:3002/api
 bundle exec rspec
 ```
 
-## Debugging API calls [#debug]
+## Debugging API calls (#debug)
 
 If you need to debug an API call made by the client, there are a few things you could do:
 
@@ -217,7 +217,7 @@ If you need to debug an API call made by the client, there are a few things you 
    to Swiftype Customer Support to help us quickly find your API request and help you troubleshoot
    your issues.
 
-## FAQ :crystal_ball: [#faq]
+## FAQ :crystal_ball: (#faq)
 
 ### Where do I report issues with the client?
 
@@ -231,14 +231,14 @@ Your best bet is to read the [documentation](https://swiftype.com/documentation/
 
 You can checkout the [Elastic App Search community discuss forums](https://discuss.elastic.co/c/app-search).
 
-## Contribute :rocket: [#contribute]
+## Contribute :rocket: (#contribute)
 
 We welcome contributors to the project. Before you begin, a couple notes...
 
 + Before opening a pull request, please create an issue to [discuss the scope of your proposal](https://github.com/swiftype/swiftype-app-search-ruby/issues).
 + Please write simple code and concise documentation, when appropriate.
 
-## License :green_book: [#license]
+## License :green_book: (#license)
 
 [MIT](https://github.com/swiftype/swiftype-app-search-ruby/blob/master/LICENSE) © [Elastic](https://github.com/elastic)
 
