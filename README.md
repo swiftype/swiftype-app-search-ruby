@@ -17,7 +17,7 @@
 
 ***
 
-## Getting started :sunny:
+## Getting started ☀️
 
 To install the gem, execute:
 
@@ -218,7 +218,7 @@ If you need to debug an API call made by the client, there are a few things you 
    to Swiftype Customer Support to help us quickly find your API request and help you troubleshoot
    your issues.
 
-## FAQ :crystal_ball:
+## FAQ 🔮
 
 ### Where do I report issues with the client?
 
@@ -232,14 +232,14 @@ Your best bet is to read the [documentation](https://swiftype.com/documentation/
 
 You can checkout the [Elastic App Search community discuss forums](https://discuss.elastic.co/c/app-search).
 
-## Contribute :rocket:
+## Contribute 🚀
 
 We welcome contributors to the project. Before you begin, a couple notes...
 
 + Before opening a pull request, please create an issue to [discuss the scope of your proposal](https://github.com/swiftype/swiftype-app-search-ruby/issues).
 + Please write simple code and concise documentation, when appropriate.
 
-## License :green_book:
+## License 📗
 
 [MIT](https://github.com/swiftype/swiftype-app-search-ruby/blob/master/LICENSE.txt) © [Elastic](https://github.com/elastic)
 
