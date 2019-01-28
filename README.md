@@ -223,11 +223,11 @@ If you need to debug an API call made by the client, there are a few things you 
 
 If something is not working as expected, please open a [GitHub issue](https://github.com/swiftype/swiftype-app-search-ruby/issues/new).
 
-## Where can I learn more about App Search?
+### Where can I learn more about App Search?
 
 Your best bet is to read the [documentation](https://swiftype.com/documentation/app-search).
 
-## Where else can I go to get help?
+### Where else can I go to get help?
 
 You can checkout the [Elastic App Search community discuss forums](https://discuss.elastic.co/c/app-search).
 
