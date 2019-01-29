@@ -1,8 +1,23 @@
-# Ruby client for the Swiftype App Search API
+<p align="center"><img src="https://github.com/swiftype-app-search-ruby/swiftype-pubs/blob/master/logo-app-search.png?raw=true" alt="Elastic App Search Logo"></p>
 
-[![CircleCI](https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg)](https://circleci.com/gh/swiftype/swiftype-app-search-ruby)
+<p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a>
+<a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
-## Installation
+> A first-party Ruby client for building excellent, relevant search experiences with Elastic App Search.
+
+## Contents
+
++ [Getting started](#getting-started-)
++ [Usage](#usage)
++ [Running Tests](#running-tests)
++ [Debugging API Calls](#debugging-api-calls)
++ [FAQ](#faq-)
++ [Contribute](#contribute-)
++ [License](#license-)
+
+***
+
+## Getting started 🐣
 
 To install the gem, execute:
 
@@ -203,6 +218,29 @@ If you need to debug an API call made by the client, there are a few things you 
    to Swiftype Customer Support to help us quickly find your API request and help you troubleshoot
    your issues.
 
-## Contributions
+## FAQ 🔮
 
-To contribute code, please fork the repository and submit a pull request.
+### Where do I report issues with the client?
+
+If something is not working as expected, please open an [issue](https://github.com/swiftype/swiftype-app-search-ruby/issues/new).
+
+### Where can I learn more about App Search?
+
+Your best bet is to read the [documentation](https://swiftype.com/documentation/app-search).
+
+### Where else can I go to get help?
+
+You can checkout the [Elastic App Search community discuss forums](https://discuss.elastic.co/c/app-search).
+
+## Contribute 🚀
+
+We welcome contributors to the project. Before you begin, a couple notes...
+
++ Before opening a pull request, please create an issue to [discuss the scope of your proposal](https://github.com/swiftype/swiftype-app-search-ruby/issues).
++ Please write simple code and concise documentation, when appropriate.
+
+## License 📗
+
+[MIT](https://github.com/swiftype/swiftype-app-search-ruby/blob/master/LICENSE.txt) © [Elastic](https://github.com/elastic)
+
+Thank you to all the [contributors](https://github.com/swiftype/swiftype-app-search-ruby/graphs/contributors)!
