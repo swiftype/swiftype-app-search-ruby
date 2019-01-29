@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/swiftype-app-search-ruby/swiftype-pubs/blob/master/logo-app-search.png?raw=true" alt="Elastic App Search Logo"></p>
+<p align="center"><img src="https://github.com/swiftype/swiftype-app-search-ruby/blob/master/logo-app-search.png?raw=true" alt="Elastic App Search Logo"></p>
 
 <p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a>
 <a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
