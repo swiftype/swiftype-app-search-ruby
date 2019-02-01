@@ -189,6 +189,23 @@ queries = [{
 client.multi_search(engine_name, queries)
 ```
 
+#### Query Suggestion
+
+```ruby
+engine_name = 'favorite-videos'
+
+options = {
+  :size => 3,
+  :types => {
+    :documents => {
+      :fields => ['title']
+    }
+  }
+}
+
+client.query_suggestion(engine_name, 'cat', options)
+```
+
 ## Running Tests
 
 ```bash
