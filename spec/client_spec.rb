@@ -353,6 +353,67 @@ describe SwiftypeAppSearch::Client do
     end
   end
 
+  context 'SearchSettings' do
+    let(:default_settings) { {
+      "search_fields" => {
+        "id" => {
+          "weight" => 1
+        }
+      },
+      "boosts" => {}
+    } }
+
+    let(:updated_settings) { {
+      "search_fields" => {
+        "id" => {
+          "weight" => 3
+        }
+      },
+      "boosts" => {}
+    } }
+
+    before(:each) do
+      client.create_engine(engine_name) rescue SwiftypeAppSearch::BadRequest
+    end
+
+    after(:each) do
+      client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord
+    end
+
+    describe '#show_settings' do
+      subject { client.show_settings(engine_name) }
+
+      it 'should return default settings' do
+        expect(subject).to match(default_settings)
+      end
+    end
+
+    describe '#update_settings' do
+      subject { client.show_settings(engine_name) }
+
+      before do
+        client.update_settings(engine_name, updated_settings)
+      end
+
+      it 'should update search settings' do
+        expect(subject).to match(updated_settings)
+      end
+    end
+
+    describe '#reset_settings' do
+      subject { client.show_settings(engine_name) }
+
+      before do
+        client.update_settings(engine_name, updated_settings)
+        client.reset_settings(engine_name)
+      end
+
+      it 'should reset search settings' do
+        expect(subject).to match(default_settings)
+      end
+    end
+  end
+
   context 'Engines' do
     after do
       client.destroy_engine(engine_name) rescue SwiftypeAppSearch::NonExistentRecord

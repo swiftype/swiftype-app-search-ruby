@@ -25,7 +25,7 @@ To install the gem, execute:
 gem install swiftype-app-search
 ```
 
-Or place `gem 'swiftype-app-search', '~> 0.5.0'` in your `Gemfile` and run `bundle install`.
+Or place `gem 'swiftype-app-search', '~> 0.6.0'` in your `Gemfile` and run `bundle install`.
 
 ## Usage
 
@@ -204,6 +204,59 @@ options = {
 }
 
 client.query_suggestion(engine_name, 'cat', options)
+```
+
+#### Show Search Settings
+
+```ruby
+engine_name = 'favorite-videos'
+
+client.show_settings(engine_name)
+```
+
+#### Update Search Settings
+
+```ruby
+engine_name = 'favorite-videos'
+
+settings = {
+  "search_fields" => {
+    "id" => {
+      "weight" => 1
+    },
+    "url" => {
+      "weight" => 1
+    },
+    "title" => {
+      "weight" => 1
+    },
+    "body" => {
+      "weight" => 1
+    },
+  },
+  "boosts" => {
+    "title" => [
+      {
+        "type" => "value",
+        "factor" => 9.5,
+        "operation" => "multiply",
+        "value" => [
+          "Titanic"
+        ]
+      }
+    ]
+  }
+}
+
+client.update_settings(engine_name)
+```
+
+#### Reset Search Settings
+
+```ruby
+engine_name = 'favorite-videos'
+
+client.reset_settings(engine_name)
 ```
 
 ## Running Tests
