@@ -248,7 +248,7 @@ settings = {
   }
 }
 
-client.update_settings(engine_name)
+client.update_settings(engine_name, settings)
 ```
 
 #### Reset Search Settings
