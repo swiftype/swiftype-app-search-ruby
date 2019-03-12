@@ -3,6 +3,7 @@ require 'json'
 require 'time'
 require 'swiftype-app-search/exceptions'
 require 'swiftype-app-search/version'
+require 'swiftype-app-search/result_response'
 require 'openssl'
 
 module SwiftypeAppSearch
@@ -10,7 +11,7 @@ module SwiftypeAppSearch
   CLIENT_VERSION = SwiftypeAppSearch::VERSION
 
   module Request
-    attr_accessor :last_request
+    attr_accessor :last_request, :last_response
 
     def get(path, params={})
       request(:get, path, params)
@@ -58,12 +59,12 @@ module SwiftypeAppSearch
 
         @last_request = request
 
-        response = http.request(request)
-        response_json = parse_response(response)
+        @last_response = http.request(request)
+        response_json = parse_response_json(@last_response)
 
-        case response
+        case @last_response
         when Net::HTTPSuccess
-          return response_json
+          SwiftypeAppSearch::ResultResponse.new(response_json)
         when Net::HTTPBadRequest
           raise SwiftypeAppSearch::BadRequest, response_json
         when Net::HTTPUnauthorized
@@ -75,16 +76,16 @@ module SwiftypeAppSearch
         when Net::HTTPRequestEntityTooLarge
           raise SwiftypeAppSearch::RequestEntityTooLarge, response_json
         else
-          raise SwiftypeAppSearch::UnexpectedHTTPException.new(response, response_json)
+          raise SwiftypeAppSearch::UnexpectedHTTPException.new(raw_response, response_json)
         end
       end
     end
 
     private
 
-    def parse_response(response)
+    def parse_response_json(response)
       body = response.body.to_s.strip
-      body == '' ? {} : JSON.parse(body)
+      (body == '') ? {} : JSON.parse(body)
     end
 
     def debug?

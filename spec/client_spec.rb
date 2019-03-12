@@ -133,7 +133,7 @@ describe SwiftypeAppSearch::Client do
       subject { client.index_documents(engine_name, documents) }
 
       it 'should return an array of document status hashes' do
-        expect(subject).to match(
+        expect(subject.json).to match(
           [
             { 'id' => anything, 'errors' => [] },
             { 'id' => second_document_id, 'errors' => [] }
@@ -145,7 +145,7 @@ describe SwiftypeAppSearch::Client do
         let(:second_document) { { 'id' => 'too long' * 100 } }
 
         it 'should return respective errors in an array of document processing hashes' do
-          expect(subject).to match(
+          expect(subject.json).to match(
             [
               { 'id' => anything, 'errors' => [] },
               { 'id' => anything, 'errors' => ['Invalid field type: id must be less than 800 characters'] },
@@ -179,7 +179,7 @@ describe SwiftypeAppSearch::Client do
       # the request responded with the correct 'id', even though
       # the 'errors' object likely contains errors.
       it 'should update existing documents' do
-        expect(subject).to match(['id' => second_document_id, 'errors' => anything])
+        expect(subject.json).to match(['id' => second_document_id, 'errors' => anything])
       end
     end
 
@@ -241,7 +241,7 @@ describe SwiftypeAppSearch::Client do
       let(:options) { { 'page' => { 'size' => 2 } } }
 
       it 'should execute a search query' do
-        expect(subject).to match(
+        expect(subject.json).to match(
           'meta' => anything,
           'results' => [anything, anything]
         )
@@ -261,7 +261,7 @@ describe SwiftypeAppSearch::Client do
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response).to match(
+          expect(response.map(&:json)).to match(
             [
               {
                 'meta' => anything,
@@ -286,7 +286,7 @@ describe SwiftypeAppSearch::Client do
 
         it 'should execute a multi search query' do
           response = subject
-          expect(response).to match(
+          expect(response.map(&:json)).to match(
             [
               {
                 'meta' => anything,
@@ -333,7 +333,7 @@ describe SwiftypeAppSearch::Client do
         subject { @static_client.query_suggestion(@static_engine_name, query, options) }
 
         it 'should request query suggestions' do
-          expect(subject).to match(
+          expect(subject.json).to match(
             'meta' => anything,
             'results' => anything
           )
@@ -344,7 +344,7 @@ describe SwiftypeAppSearch::Client do
         subject { @static_client.query_suggestion(@static_engine_name, query) }
 
         it 'should request query suggestions' do
-          expect(subject).to match(
+          expect(subject.json).to match(
             'meta' => anything,
             'results' => anything
           )
@@ -384,7 +384,7 @@ describe SwiftypeAppSearch::Client do
       subject { client.show_settings(engine_name) }
 
       it 'should return default settings' do
-        expect(subject).to match(default_settings)
+        expect(subject.json).to match(default_settings)
       end
     end
 
@@ -396,7 +396,7 @@ describe SwiftypeAppSearch::Client do
       end
 
       it 'should update search settings' do
-        expect(subject).to match(updated_settings)
+        expect(subject.json).to match(updated_settings)
       end
     end
 
@@ -409,7 +409,7 @@ describe SwiftypeAppSearch::Client do
       end
 
       it 'should reset search settings' do
-        expect(subject).to match(default_settings)
+        expect(subject.json).to match(default_settings)
       end
     end
   end
@@ -429,12 +429,12 @@ describe SwiftypeAppSearch::Client do
       it 'should accept an optional language parameter' do
         expect { client.get_engine(engine_name) }.to raise_error(SwiftypeAppSearch::NonExistentRecord)
         client.create_engine(engine_name, 'da')
-        expect(client.get_engine(engine_name)).to match('name' => anything, 'type' => anything, 'language' => 'da')
+        expect(client.get_engine(engine_name).json).to match('name' => anything, 'type' => anything, 'language' => 'da')
       end
 
       it 'should return an engine object' do
         engine = client.create_engine(engine_name)
-        expect(engine).to be_kind_of(Hash)
+        expect(engine).to be_kind_of(SwiftypeAppSearch::ResultResponse)
         expect(engine['name']).to eq(engine_name)
       end
 

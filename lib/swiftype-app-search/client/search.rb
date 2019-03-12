@@ -27,9 +27,11 @@ module SwiftypeAppSearch
           options = search[:options] || {}
           Utils.symbolize_keys(options).merge(:query => query)
         end
-        request(:post, "engines/#{engine_name}/multi_search", {
+        request(
+          :post,
+          "engines/#{engine_name}/multi_search",
           queries: params
-        })
+        ).map { |result_set| ResultResponse.new(result_set) }
       end
     end
   end

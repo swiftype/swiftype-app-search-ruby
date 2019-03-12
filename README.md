@@ -170,7 +170,7 @@ search_fields = { :title => {} }
 result_fields = { :title => { :raw => {} } }
 options = { :search_fields => search_fields, :result_fields => result_fields }
 
-client.search(engine_name, query, options)
+client.search(engine_name, query, options).map { |document| puts document['title']['raw'] }
 ```
 
 #### Multi-Search
@@ -186,7 +186,7 @@ queries = [{
   :options => { :search_fields => { :body => {} }}
 }]
 
-client.multi_search(engine_name, queries)
+client.multi_search(engine_name, queries).flat_map { |document| puts document['title']['raw'] }
 ```
 
 #### Query Suggestion
