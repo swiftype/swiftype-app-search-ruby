@@ -4,7 +4,7 @@
 >
 > **Please visit [https://github.com/elastic/app-search-ruby](https://github.com/elastic/app-search-ruby) for the up to date version. Thank you! - Elastic**
 
-<p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a>
+<p align="center">
 <a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
 > A first-party Ruby client for building excellent, relevant search experiences with Elastic App Search.
