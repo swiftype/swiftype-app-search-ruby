@@ -1,5 +1,9 @@
 <p align="center"><img src="https://github.com/swiftype/swiftype-app-search-ruby/blob/master/logo-app-search.png?raw=true" alt="Elastic App Search Logo"></p>
 
+> **⚠️ This repository is deprecated ⚠️**
+>
+> **Please visit [https://github.com/elastic/app-search-ruby](https://github.com/elastic/app-search-ruby) for the up to date version. Thank you! - Elastic**
+
 <p align="center"><a href="https://circleci.com/gh/swiftype/swiftype-app-search-ruby"><img src="https://circleci.com/gh/swiftype/swiftype-app-search-ruby.svg?style=svg" alt="CircleCI buidl"></a>
 <a href="https://github.com/swiftype/swiftype-app-search-ruby/releases"><img src="https://img.shields.io/github/release/swiftype/swiftype-app-search-ruby/all.svg?style=flat-square" alt="GitHub release" /></a></p>
 
